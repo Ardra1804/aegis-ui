@@ -9,6 +9,8 @@ import Monitoring from "./pages/Monitoring"
 import Violations from "./pages/Violations"
 import Policies from "./pages/Policies"
 
+import ProtectedRoute from "./components/ProtectedRoute"
+
 function App() {
 
 return (
@@ -17,14 +19,49 @@ return (
 
 <Routes>
 
+{/* Public Routes */}
+
 <Route path="/" element={<SplashScreen/>}/>
 <Route path="/login" element={<Login/>}/>
 <Route path="/register" element={<Register/>}/>
 
-<Route path="/dashboard" element={<Dashboard/>}/>
-<Route path="/monitoring" element={<Monitoring/>}/>
-<Route path="/violations" element={<Violations/>}/>
-<Route path="/policies" element={<Policies/>}/>
+{/* Protected Admin Routes */}
+
+<Route
+path="/dashboard"
+element={
+<ProtectedRoute>
+<Dashboard/>
+</ProtectedRoute>
+}
+/>
+
+<Route
+path="/monitoring"
+element={
+<ProtectedRoute>
+<Monitoring/>
+</ProtectedRoute>
+}
+/>
+
+<Route
+path="/violations"
+element={
+<ProtectedRoute>
+<Violations/>
+</ProtectedRoute>
+}
+/>
+
+<Route
+path="/policies"
+element={
+<ProtectedRoute>
+<Policies/>
+</ProtectedRoute>
+}
+/>
 
 </Routes>
 

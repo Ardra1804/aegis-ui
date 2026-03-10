@@ -1,14 +1,33 @@
+import { useState } from "react"
 import { useNavigate } from "react-router-dom"
+
+import { signInWithEmailAndPassword } from "firebase/auth"
+import { auth } from "../firebase/firebaseConfig"
 
 export default function Login(){
 
 const navigate = useNavigate()
 
-function handleLogin(e){
+const [email,setEmail] = useState("")
+const [password,setPassword] = useState("")
+
+async function handleLogin(e){
+
 e.preventDefault()
 
-// later replace with API
+try{
+
+await signInWithEmailAndPassword(auth,email,password)
+
 navigate("/dashboard")
+
+}
+catch(error){
+
+alert("Invalid credentials")
+
+}
+
 }
 
 return(
@@ -26,12 +45,16 @@ Admin Login
 <input
 type="email"
 placeholder="Admin Email"
+value={email}
+onChange={(e)=>setEmail(e.target.value)}
 className="w-full p-3 rounded bg-slate-800 border border-slate-700 text-white"
 />
 
 <input
 type="password"
 placeholder="Password"
+value={password}
+onChange={(e)=>setPassword(e.target.value)}
 className="w-full p-3 rounded bg-slate-800 border border-slate-700 text-white"
 />
 
@@ -43,11 +66,13 @@ Login
 
 </form>
 
-<p className="text-gray-400 text-sm mt-4 text-center">
-Don't have an account?
+{/* REGISTER LINK */}
+
+<p className="text-gray-400 text-sm mt-5 text-center">
+Don't have an account?{" "}
 <span
 onClick={()=>navigate("/register")}
-className="text-cyan-400 cursor-pointer ml-2"
+className="text-cyan-400 cursor-pointer hover:underline"
 >
 Register
 </span>

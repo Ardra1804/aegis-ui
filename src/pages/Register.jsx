@@ -1,14 +1,35 @@
+import { useState } from "react"
 import { useNavigate } from "react-router-dom"
+
+import { auth } from "../firebase/firebaseConfig"
+import { createUserWithEmailAndPassword } from "firebase/auth"
 
 export default function Register(){
 
 const navigate = useNavigate()
 
-function handleRegister(e){
+const [email,setEmail] = useState("")
+const [password,setPassword] = useState("")
+
+async function handleRegister(e){
+
 e.preventDefault()
 
-// later connect API
+try{
+
+await createUserWithEmailAndPassword(auth,email,password)
+
+alert("Admin Registered Successfully")
+
 navigate("/login")
+
+}
+catch(error){
+
+alert(error.message)
+
+}
+
 }
 
 return(
@@ -24,20 +45,18 @@ Admin Registration
 <form onSubmit={handleRegister} className="space-y-4">
 
 <input
-type="text"
-placeholder="Admin Name"
-className="w-full p-3 rounded bg-slate-800 border border-slate-700 text-white"
-/>
-
-<input
 type="email"
 placeholder="Admin Email"
+value={email}
+onChange={(e)=>setEmail(e.target.value)}
 className="w-full p-3 rounded bg-slate-800 border border-slate-700 text-white"
 />
 
 <input
 type="password"
 placeholder="Password"
+value={password}
+onChange={(e)=>setPassword(e.target.value)}
 className="w-full p-3 rounded bg-slate-800 border border-slate-700 text-white"
 />
 
@@ -48,16 +67,6 @@ Register
 </button>
 
 </form>
-
-<p className="text-gray-400 text-sm mt-4 text-center">
-Already have an account?
-<span
-onClick={()=>navigate("/login")}
-className="text-cyan-400 cursor-pointer ml-2"
->
-Login
-</span>
-</p>
 
 </div>
 

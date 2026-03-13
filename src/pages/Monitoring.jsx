@@ -36,11 +36,11 @@ export default function Monitoring(){
 
 return(
 
-<div className="flex">
+<div className="flex min-h-screen bg-slate-950">
 
 <Sidebar/>
 
-<div className="flex-1 p-10">
+<div className="flex-1 p-10 overflow-y-auto">
 
 <h2 className="text-3xl text-cyan-400 mb-8">
 AI Prompt Monitoring

@@ -25,11 +25,11 @@ export default function Violations(){
 
 return(
 
-<div className="flex">
+<div className="flex min-h-screen bg-slate-950">
 
 <Sidebar/>
 
-<div className="flex-1 p-10">
+<div className="flex-1 p-10 overflow-y-auto">
 
 <h2 className="text-3xl text-red-400 mb-8">
 Policy Violations

@@ -9,11 +9,11 @@ export default function Dashboard(){
 
 return(
 
-<div className="flex">
+<div className="flex min-h-screen bg-slate-950">
 
 <Sidebar/>
 
-<div className="flex-1 p-10">
+<div className="flex-1 p-10 overflow-y-auto">
 
 <Header/>
 

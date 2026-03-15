@@ -1,7 +1,13 @@
+import { useEffect, useState } from "react"
+
 import Sidebar from "../components/Sidebar"
 import AttackFeed from "../components/AttackFeed"
 
-const sessions = [
+import { getViolations } from "../api/globalApi"
+
+/* FALLBACK DATA */
+
+const fallbackSessions = [
 {
 user:"emp21",
 tool:"ChatGPT",
@@ -33,6 +39,55 @@ status:"Safe"
 ]
 
 export default function Monitoring(){
+
+const [sessions,setSessions] = useState(fallbackSessions)
+
+/* LOAD DATA FROM BACKEND */
+
+useEffect(()=>{
+
+async function loadSessions(){
+
+try{
+
+const data = await getViolations()
+
+if(data && data.length>0){
+
+/* MAP DB DATA → SESSION FORMAT */
+
+const mapped = data.slice(0,10).map(v=>({
+
+user:v.user_id,
+tool:v.ai_tool,
+action:v.prompt_text,
+time:new Date(v.created_at).toLocaleTimeString([], {hour:"2-digit",minute:"2-digit"}),
+
+status:
+v.risk_level==="High"
+? "Blocked"
+: v.risk_level==="Medium"
+? "Medium Risk"
+: "Safe"
+
+}))
+
+setSessions(mapped)
+
+}
+
+}
+catch(error){
+
+console.error("Monitoring API error:",error)
+
+}
+
+}
+
+loadSessions()
+
+},[])
 
 return(
 
@@ -111,4 +166,4 @@ s.status==="Safe"
 
 )
 
-} 
+}

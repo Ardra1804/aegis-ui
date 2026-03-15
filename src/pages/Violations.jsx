@@ -1,6 +1,11 @@
+import { useEffect, useState } from "react"
 import Sidebar from "../components/Sidebar"
 
-const violations = [
+import { getViolations } from "../api/globalApi"
+
+/* FALLBACK DATA */
+
+const fallbackViolations = [
 {
 time:"10:31",
 user:"emp02",
@@ -22,6 +27,52 @@ severity:"High"
 ]
 
 export default function Violations(){
+
+const [violations,setViolations] = useState(fallbackViolations)
+
+/* LOAD DATA FROM API */
+
+useEffect(()=>{
+
+async function loadViolations(){
+
+try{
+
+const data = await getViolations()
+
+if(data && data.length>0){
+
+const mapped = data.map(v=>({
+
+time:new Date(v.created_at).toLocaleTimeString([],{
+hour:"2-digit",
+minute:"2-digit"
+}),
+
+user:v.user_id,
+
+type:v.violation_type || "AI Policy Violation",
+
+severity:v.risk_level
+
+}))
+
+setViolations(mapped)
+
+}
+
+}
+catch(error){
+
+console.error("Violations API error:",error)
+
+}
+
+}
+
+loadViolations()
+
+},[])
 
 return(
 
@@ -51,7 +102,13 @@ Policy Violations
 User: {v.user}
 </p>
 
-<p className="text-red-400 font-bold mt-2">
+<p className={`font-bold mt-2 ${
+v.severity==="High"
+? "text-red-400"
+: v.severity==="Medium"
+? "text-yellow-400"
+: "text-green-400"
+}`}>
 Severity: {v.severity}
 </p>
 

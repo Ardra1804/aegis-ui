@@ -1,29 +1,82 @@
-import axios from "axios";
+const BASE_URL = "http://localhost:5000/api"
 
-const API_BASE_URL = "http://localhost:8000";
+/* -------------------------------
+GET ALL VIOLATIONS
+--------------------------------*/
 
-export const getDashboardStats = async () => {
-  return {
-    prompts: 1254,
-    violations: 32,
-    highRisk: 5,
-    users: 14
-  };
-};
+export const getViolations = async () => {
 
-export const getViolationLogs = async () => {
-  return [
-    {
-      time: "10:32",
-      user: "emp_21",
-      tool: "ChatGPT",
-      risk: "High"
-    },
-    {
-      time: "10:40",
-      user: "emp_08",
-      tool: "Gemini",
-      risk: "Medium"
-    }
-  ];
-};
+try{
+
+const response = await fetch(`${BASE_URL}/violations`)
+const data = await response.json()
+
+return data
+
+}
+catch(error){
+
+console.error("Error fetching violations:",error)
+return []
+
+}
+
+}
+
+
+/* -------------------------------
+GET RISK DISTRIBUTION
+--------------------------------*/
+
+export const getRiskDistribution = async () => {
+
+try{
+
+const response = await fetch(`${BASE_URL}/violations/risk-distribution`)
+const data = await response.json()
+
+return data
+
+}
+catch(error){
+
+console.error("Error fetching risk distribution:",error)
+return []
+
+}
+
+}
+
+
+/* -------------------------------
+LOG NEW PROMPT VIOLATION
+--------------------------------*/
+
+export const logViolation = async (violationData) => {
+
+try{
+
+const response = await fetch(`${BASE_URL}/violations/log`,{
+
+method:"POST",
+
+headers:{
+"Content-Type":"application/json"
+},
+
+body:JSON.stringify(violationData)
+
+})
+
+const data = await response.json()
+
+return data
+
+}
+catch(error){
+
+console.error("Error logging violation:",error)
+
+}
+
+}

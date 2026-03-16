@@ -1,14 +1,15 @@
 import { PieChart, Pie, Cell, Tooltip, Legend } from "recharts"
 
-const data = [
-  { name: "Safe", value: 70 },
-  { name: "Medium", value: 20 },
-  { name: "High", value: 10 }
-]
-
 const COLORS = ["#22c55e", "#facc15", "#ef4444"]
 
-export default function RiskChart(){
+export default function RiskChart({ data = [] }){
+
+/* Convert backend format → chart format */
+
+const chartData = data.map(item => ({
+  name: item.risk_level,
+  value: item.count
+}))
 
 return(
 
@@ -23,7 +24,7 @@ Risk Distribution
 <PieChart width={350} height={250}>
 
 <Pie
-data={data}
+data={chartData}
 dataKey="value"
 nameKey="name"
 cx="50%"
@@ -32,8 +33,8 @@ outerRadius={80}
 label
 >
 
-{data.map((entry,index)=>(
-<Cell key={index} fill={COLORS[index]}/>
+{chartData.map((entry,index)=>(
+<Cell key={index} fill={COLORS[index % COLORS.length]}/>
 ))}
 
 </Pie>
